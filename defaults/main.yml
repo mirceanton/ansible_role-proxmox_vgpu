@@ -1,4 +1,13 @@
 ---
+# =================================================================================================
+# Variables for the dependency roles
+# =================================================================================================
+proxmox_driver_blacklist: [ nouveau ]
+
+# =================================================================================================
+# Variables for the role
+# =================================================================================================
+# Required packages to run this setup
 proxmox_vgpu_apt_packages:
   - git
   - build-essential
@@ -6,10 +15,34 @@ proxmox_vgpu_apt_packages:
   - pve-headers
   - mdevctl
 
-proxmox_vgpu_git_repos:
-  - repo: https://gitlab.com/polloloco/vgpu-proxmox.git
-    dest: /opt/vgpu-proxmox
-  - repo: https://github.com/mbilker/vgpu_unlock-rs.git
-    dest: /opt/vgpu_unlock-rs
+# ===============================================
+# Git Repos Configuration
+# ===============================================
+proxmox_vgpu_vgpurs_path: /opt/vgpu_unlock-rs
+proxmox_vgpu_vgpurs_repo: https://github.com/mbilker/vgpu_unlock-rs.git
+proxmox_vgpu_vgpurs_tag: "2.3.1"
 
-proxmox_driver_blacklist: [ nouveau ]
+# ===============================================
+# Service Files Configuration
+# ===============================================
+proxmox_vgpu_service_files:
+  - src: vgpud.conf
+    dest: /etc/systemd/system/nvidia-vgpud.service.d/vgpu_unlock.conf
+  - src: vgpu-mgr.conf
+    dest: /etc/systemd/system/nvidia-vgpu-mgr.service.d/vgpu_unlock.conf
+
+proxmox_vgpu_service_files_dirs:
+  - /etc/systemd/system/nvidia-vgpu-mgr.service.d
+  - /etc/systemd/system/nvidia-vgpud.service.d
+
+# ===============================================
+# Nvidia Driver Configuration
+# ===============================================
+proxmox_vgpu_nvidia_driver_name: NVIDIA-Linux-x86_64-510.85.03-vgpu-kvm.run
+proxmox_vgpu_nvidia_driver: "/opt/{{ proxmox_vgpu_nvidia_driver_name }}"
+
+proxmox_vgpu_nvidia_driver_patch_url: https://gitlab.com/polloloco/vgpu-proxmox/-/blob/919b49ed74b292a899f30b6d78b5f8ebdde89403/NVIDIA-Linux-x86_64-510.73.06-vgpu-kvm.patch
+proxmox_vgpu_nvidia_driver_patch: /opt/NVIDIA-Linux-x86_64-510.73.06-vgpu-kvm.patch
+
+proxmox_vgpu_nvidia_patched_driver_name: NVIDIA-Linux-x86_64-{{ proxmox_vgpu_nvidia_driver_version }}-vgpu-kvm-custom.run
+proxmox_vgpu_nvidia_patched_driver: "/opt/{{ proxmox_vgpu_nvidia_patched_driver_name }}"

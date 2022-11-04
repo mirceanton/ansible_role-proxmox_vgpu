@@ -1,0 +1,21 @@
+# [profile.nvidia-259]
+# num_displays = 1          # Max number of virtual displays. Usually 1 if you want a simple remote gaming VM
+# display_width = 1920      # Maximum display width in the VM
+# display_height = 1080     # Maximum display height in the VM
+# max_pixels = 2073600      # This is the product of display_width and display_height so 1920 * 1080 = 2073600
+# cuda_enabled = 1          # Enables CUDA support. Either 1 or 0 for enabled/disabled
+# frl_enabled = 1           # This controls the frame rate limiter, if you enable it your fps in the VM get locked to 60fps. Either 1 or 0 for enabled/disabled
+# framebuffer = 0x76000000  # VRAM size for the VM. In this case its 2GB
+#                           # Other options:
+#                           # 1GB: 0x3B000000
+#                           # 2GB: 0x76000000
+#                           # 3GB: 0xB1000000
+#                           # 4GB: 0xEC000000
+#                           # 8GB: 0x1D8000000
+#                           # 16GB: 0x3B0000000
+#                           # These numbers may not be accurate for you, but you can always calculate the right number like this:
+#                           # The amount of VRAM in your VM = `framebuffer` + `framebuffer_reservation`
+# 
+# [mdev.00000000-0000-0000-0000-000000000100]
+# frl_enabled = 0
+# # You can override all the options from above here too. If you want to add more overrides for a new VM, just copy this block and change the UUID

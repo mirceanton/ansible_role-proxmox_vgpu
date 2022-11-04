@@ -1,5 +1,6 @@
 ---
-- meta: flush_handlers
+- name: Run handlers from dependency roles
+  ansible.builtin.meta: flush_handlers
 
 - name: Install required packages
   ansible.builtin.apt:
@@ -9,60 +10,14 @@
     cache_valid_time: 3600
   loop: "{{ proxmox_vgpu_apt_packages }}"
 
-- name: Clone required git repos
-  ansible.builtin.git:
-    repo: "{{ item.repo }}"
-    dest: "{{ item.dest }}"
-  loop: "{{ proxmox_vgpu_git_repos }}"
+- name: Compile VGPU-rs from source
+  ansible.builtin.import_tasks: compile-vgpurs.yml
 
-- name: Compile vgpu_unlock-rs
-  ansible.builtin.shell:
-    cmd: cargo build --release
-    chdir: /opt/vgpu_unlock-rs
-    creates: /opt/vgpu_unlock-rs/target/release/libvgpu_unlock_rs.so
+- name: Create the service files
+  ansible.builtin.import_tasks: import-service-files.yml
 
-- name: Create required directories
-  ansible.builtin.file:
-    path: "{{ item.path }}"
-    state: "{{ item.state }}"
-  loop:
-    - path: /etc/vgpu_unlock
-      state: directory
-    - path: /etc/systemd/system/nvidia-vgpu-mgr.service.d
-      state: directory
-    - path: /etc/systemd/system/nvidia-vgpud.service.d
-      state: directory
+- name: Patch and install the driver
+  ansible.builtin.import_tasks: patch-and-install-driver.yml
 
-- name: Create Nvidia vGPUd service file
-  ansible.builtin.blockinfile:
-    create: true
-    block: >
-      [Service]
-      Environment=LD_PRELOAD=/opt/vgpu_unlock-rs/target/release/libvgpu_unlock_rs.so
-    path: /etc/systemd/system/nvidia-vgpud.service.d/vgpu_unlock.conf
-
-- name: Create Nvidia vGPU manager service file
-  ansible.builtin.blockinfile:
-    create: true
-    block: >
-      [Service]
-      Environment=LD_PRELOAD=/opt/vgpu_unlock-rs/target/release/libvgpu_unlock_rs.so
-    path: /etc/systemd/system/nvidia-vgpu-mgr.service.d/vgpu_unlock.conf
-
-- name: Copy Nvidia Driver package
-  ansible.builtin.copy:
-    src: NVIDIA-Linux-x86_64-510.85.03-vgpu-kvm.run
-    dest: /opt/NVIDIA-Linux-x86_64-510.85.03-vgpu-kvm.run
-    owner: root
-    group: root
-    mode: u=rwx,g=rwx,o=r
-
-- name: Patch the Nvidia Driver
-  ansible.builtin.shell:
-    cmd: cd /opt && ./NVIDIA-Linux-x86_64-510.85.03-vgpu-kvm.run --apply-patch /opt/vgpu-proxmox/510.85.03.patch
-    creates: /opt/NVIDIA-Linux-x86_64-510.85.03-vgpu-kvm-custom.run
-
-- name: Install the Nvidia Driver
-  ansible.builtin.shell:
-    cmd: /opt/NVIDIA-Linux-x86_64-510.85.03-vgpu-kvm-custom.run --dkms --silent
-    creates: /usr/bin/nvidia-uninstall
+- name: Import profile overrides
+  ansible.builtin.import_tasks: import-profile-override.yml
