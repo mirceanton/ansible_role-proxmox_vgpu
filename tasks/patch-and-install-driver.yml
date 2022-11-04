@@ -1,31 +1,20 @@
 ---
-- name: Copy Nvidia Driver package
-  ansible.builtin.copy:
-    src: "{{ proxmox_vgpu_nvidia_driver }}"
-    dest: "{{ proxmox_vgpu_temp_directory }}/{{ proxmox_vgpu_nvidia_driver }}"
-    owner: root
-    group: root
-    mode: u=rwx,g=rwx,o=r
-
 - name: Download driver patch
   ansible.builtin.get_url:
     url: "{{ proxmox_vgpu_nvidia_driver_patch_url }}"
-    dest: "{{ proxmox_vgpu_temp_directory }}/{{ proxmox_vgpu_nvidia_driver_patch }}"
+    dest: "/opt/{{ proxmox_vgpu_nvidia_driver_patch }}"
 
 - name: Patch the Nvidia Driver
   ansible.builtin.shell:
     creates: "{{ proxmox_vgpu_nvidia_patched_driver }}"
     cmd: >
-      cd {{ proxmox_vgpu_temp_directory }};
-      ./{{ proxmox_vgpu_nvidia_driver }} \
-        --apply-patch ./{{ proxmox_vgpu_nvidia_driver_patch }}
+      cd /opt;
+      ./{{ proxmox_vgpu_nvidia_driver }} --apply-patch ./{{ proxmox_vgpu_nvidia_driver_patch }}
   register: __patch_output
   failed_when: '"Failed to apply patch" in __patch_output.stdout'
 
 - name: Install the Nvidia Driver
   ansible.builtin.shell:
     creates: /usr/bin/nvidia-uninstall
-    cmd: >
-      cd {{ proxmox_vgpu_temp_directory }};
-      ./{{ proxmox_vgpu_nvidia_patched_driver }} --dkms --silent
+    cmd: /opt/{{ proxmox_vgpu_nvidia_patched_driver }} --dkms --silent
   notify: Reboot

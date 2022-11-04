@@ -15,12 +15,12 @@ proxmox_vgpu_apt_packages:
   - pve-headers
   - mdevctl
 
-proxmox_vgpu_temp_directory: /opt
+proxmox_vgpu_override_dir: /etc/vgpu_unlock
 
 # ===============================================
 # Git Repos Configuration
 # ===============================================
-proxmox_vgpu_vGPUrs_path: "{{ proxmox_vgpu_temp_directory }}/vgpu_unlock-rs"
+proxmox_vgpu_vGPUrs_path: /opt/vgpu_unlock-rs
 proxmox_vgpu_vGPUrs_repo: https://github.com/mbilker/vgpu_unlock-rs.git
 proxmox_vgpu_vGPUrs_tag: v2.3.1
 
@@ -45,5 +45,3 @@ proxmox_vgpu_nvidia_patched_driver: NVIDIA-Linux-x86_64-510.85.03-vgpu-kvm-custo
 
 proxmox_vgpu_nvidia_driver_patch_url: https://gitlab.com/polloloco/vgpu-proxmox/-/raw/f224154ea5a5e336f59f428537acda148f9aa7bd/510.85.03.patch?inline=false
 proxmox_vgpu_nvidia_driver_patch: NVIDIA-Linux-x86_64-510.73.06-vgpu-kvm.patch
-
-proxmox_vgpu_override_dir: /etc/vgpu_unlock
