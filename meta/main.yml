@@ -16,7 +16,7 @@ galaxy_info:
 
   galaxy_tags:
     - proxmox
-    - Nvidia
+    - nvidia
     - vgpu
     - virtualization
     - gpu
