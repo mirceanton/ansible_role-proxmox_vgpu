@@ -1,0 +1,13 @@
+---
+- name: Create the directory for the profile override
+  ansible.builtin.file:
+    path: "{{ proxmox_vgpu_override_dir }}"
+    state: directory
+
+- name: Import custom profile override file
+  ansible.builtin.copy:
+    src: "profile_override.toml"
+    dest: "{{ proxmox_vgpu_override_dir }}/profile_override.toml"
+    owner: root
+    group: root
+    mode: u=rwx,g=rwx,o=r

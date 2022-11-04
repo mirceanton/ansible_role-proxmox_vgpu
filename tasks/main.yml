@@ -1,0 +1,23 @@
+---
+- name: Run handlers from dependency roles
+  ansible.builtin.meta: flush_handlers
+
+- name: Install required packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  loop: "{{ proxmox_vgpu_apt_packages }}"
+
+- name: Compile VGPU-rs from source
+  ansible.builtin.import_tasks: compile-vgpurs.yml
+
+- name: Create the service files
+  ansible.builtin.import_tasks: import-service-files.yml
+
+- name: Patch and install the driver
+  ansible.builtin.import_tasks: patch-and-install-driver.yml
+
+- name: Import profile overrides
+  ansible.builtin.import_tasks: import-profile-override.yml

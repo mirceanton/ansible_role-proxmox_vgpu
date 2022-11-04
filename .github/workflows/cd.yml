@@ -1,0 +1,19 @@
+---
+name: Publish role to Galaxy
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v2
+
+      - name: Publish role to Ansible Galaxy
+        uses: robertdebock/galaxy-action@1.2.0
+        with:
+          galaxy_api_key: ${{ secrets.ANSIBLE_GALAXY_API_KEY }}

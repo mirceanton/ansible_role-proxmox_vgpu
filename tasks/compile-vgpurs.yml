@@ -1,0 +1,12 @@
+---
+- name: Clone the vgpu-rs repo
+  ansible.builtin.git:
+    repo: "{{ proxmox_vgpu_vGPUrs_repo }}"
+    dest: "{{ proxmox_vgpu_vGPUrs_path }}"
+    version: "{{ proxmox_vgpu_vGPUrs_tag }}"
+
+- name: Compile vgpu_unlock-rs
+  ansible.builtin.shell:
+    cmd: cargo build --release
+    chdir: "{{ proxmox_vgpu_vGPUrs_path }}"
+    creates: "{{ proxmox_vgpu_vGPUrs_path }}/target/release/libvgpu_unlock_rs.so"
