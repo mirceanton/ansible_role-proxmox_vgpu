@@ -16,9 +16,9 @@
   ansible.builtin.shell:
     creates: "{{ proxmox_vgpu_nvidia_patched_driver }}"
     cmd: >
-      cd {{ proxmox_vgpu_temp_directory }} && /
-      {{ proxmox_vgpu_temp_directory }}/{{ proxmox_vgpu_nvidia_driver }} /
-        --apply-patch {{ proxmox_vgpu_temp_directory }}/{{ proxmox_vgpu_nvidia_driver_patch }}"
+      cd {{ proxmox_vgpu_temp_directory }};
+      ./{{ proxmox_vgpu_nvidia_driver }} \
+        --apply-patch ./{{ proxmox_vgpu_nvidia_driver_patch }}
   register: __patch_output
   failed_when: '"Failed to apply patch" in __patch_output.stdout'
 
@@ -26,5 +26,6 @@
   ansible.builtin.shell:
     creates: /usr/bin/nvidia-uninstall
     cmd: >
-      "{{ proxmox_vgpu_temp_directory }}/{{ proxmox_vgpu_nvidia_patched_driver }} --dkms --silent"
+      cd {{ proxmox_vgpu_temp_directory }};
+      ./{{ proxmox_vgpu_nvidia_patched_driver }} --dkms --silent
   notify: Reboot
