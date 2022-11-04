@@ -5,7 +5,7 @@
     state: directory
 
 - name: Import custom profile override file
-  ansible.builtin.file:
+  ansible.builtin.copy:
     src: "profile_override.toml"
     dest: "{{ proxmox_vgpu_override_dir }}/profile_override.toml"
     owner: root
