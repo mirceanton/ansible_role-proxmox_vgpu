@@ -10,6 +10,8 @@ Requirements
 
 This role requires that you get a hold of the Nvidia vGPU driver version 510.85.03 for linux kvm. Details on how to obtain it can be found [here](https://gitlab.com/polloloco/vgpu-proxmox/-/tree/master#obtaining-the-driver).
 
+Once you obtained the driver file, make sure to place it in the `/opt/` directory **before** running the role. An example playbook is listed below.
+
 Role Variables
 --------------
 
