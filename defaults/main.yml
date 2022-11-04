@@ -1,0 +1,15 @@
+---
+proxmox_vgpu_apt_packages:
+  - git
+  - build-essential
+  - dkms
+  - pve-headers
+  - mdevctl
+
+proxmox_vgpu_git_repos:
+  - repo: https://gitlab.com/polloloco/vgpu-proxmox.git
+    dest: /opt/vgpu-proxmox
+  - repo: https://github.com/mbilker/vgpu_unlock-rs.git
+    dest: /opt/vgpu_unlock-rs
+
+proxmox_driver_blacklist: [ nouveau ]
