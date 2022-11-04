@@ -20,9 +20,9 @@ proxmox_vgpu_temp_directory: /opt
 # ===============================================
 # Git Repos Configuration
 # ===============================================
-proxmox_vgpu_vgpu-rs_path: "{{ proxmox_vgpu_temp_directory }}/vgpu_unlock-rs"
-proxmox_vgpu_vgpu-rs_repo: https://github.com/mbilker/vgpu_unlock-rs.git
-proxmox_vgpu_vgpu-rs_tag: v2.3.1
+proxmox_vgpu_vGPUrs_path: "{{ proxmox_vgpu_temp_directory }}/vgpu_unlock-rs"
+proxmox_vgpu_vGPUrs_repo: https://github.com/mbilker/vgpu_unlock-rs.git
+proxmox_vgpu_vGPUrs_tag: v2.3.1
 
 # ===============================================
 # Service Files Configuration
