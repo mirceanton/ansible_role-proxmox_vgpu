@@ -24,7 +24,12 @@ galaxy_info:
 
 dependencies:
   - role: mirceanton.proxmox_no_subscription
+    version: v2.0.0
   - role: mirceanton.proxmox_iommu
+    version: v1.0.1
   - role: mirceanton.proxmox_vfio
+    version: v1.0.0
   - role: mirceanton.proxmox_driver_blacklist
+    version: v1.0.0
   - role: mirceanton.rust
+    version: v1.0.0
