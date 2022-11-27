@@ -12,6 +12,7 @@ galaxy_info:
   platforms:
     - name: Proxmox VE
       versions:
+        - 7.3
         - 7.2
 
   galaxy_tags:
@@ -26,7 +27,7 @@ dependencies:
   - role: mirceanton.proxmox_no_subscription
     version: v2.0.0
   - role: mirceanton.proxmox_iommu
-    version: v1.0.1
+    version: v1.0.2
   - role: mirceanton.proxmox_vfio
     version: v1.0.0
   - role: mirceanton.proxmox_driver_blacklist
